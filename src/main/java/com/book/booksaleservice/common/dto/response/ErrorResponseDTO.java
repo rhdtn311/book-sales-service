@@ -1,4 +1,4 @@
-package com.book.booksaleservice.common.response.dto;
+package com.book.booksaleservice.common.dto.response;
 
 import com.book.booksaleservice.common.exception.ErrorCode;
 

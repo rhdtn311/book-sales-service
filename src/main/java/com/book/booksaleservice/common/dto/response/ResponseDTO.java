@@ -1,4 +1,4 @@
-package com.book.booksaleservice.common.response.dto;
+package com.book.booksaleservice.common.dto.response;
 
 public class ResponseDTO {
     private int status;
