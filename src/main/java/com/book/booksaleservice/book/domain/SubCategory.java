@@ -1,5 +1,5 @@
 package com.book.booksaleservice.book.domain;
 
 public enum SubCategory {
-    NOVEL, POETRY, ART, HISTORY
+    ALL, NOVEL, POETRY, ART, HISTORY, EDUCATION,
 }
