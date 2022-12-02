@@ -4,6 +4,7 @@ import com.book.booksaleservice.book.domain.Book;
 import com.book.booksaleservice.book.dto.BookDTO;
 import com.book.booksaleservice.book.repository.BookRepository;
 import com.book.booksaleservice.common.dto.DtoConverter;
+import com.book.booksaleservice.common.exception.book.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,4 +31,10 @@ public class BookService {
                 .toList();
     }
 
+    public BookDTO.Res findById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(BookNotFoundException::new);
+
+        return DtoConverter.convertBookToResDTO(book);
+    }
 }

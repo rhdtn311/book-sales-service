@@ -1,17 +1,24 @@
 package com.book.booksaleservice.book.repository;
 
 import com.book.booksaleservice.book.domain.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class JdbcBookRepository implements BookRepository {
 
     private final static String FIND_BY_CATEGORY_SQL = "SELECT * FROM BOOK b LEFT JOIN CATEGORY c ON b.category_id = c.id";
+    private final static String FIND_BY_ID_SQL = "SELECT * FROM BOOK WHERE id = :id";
+
+    private final static Logger logger = LoggerFactory.getLogger(JdbcBookRepository.class);
 
     private final NamedParameterJdbcTemplate template;
 
@@ -53,6 +60,16 @@ public class JdbcBookRepository implements BookRepository {
         }
 
         return condition.toString();
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try {
+            return Optional.ofNullable(template.queryForObject(FIND_BY_ID_SQL, Map.of("id", id), bookRowMapper));
+        } catch (DataAccessException e) {
+            logger.error("[ERROR] Database error : {}", e.getMessage());
+        }
+        return Optional.empty();
     }
 
 }

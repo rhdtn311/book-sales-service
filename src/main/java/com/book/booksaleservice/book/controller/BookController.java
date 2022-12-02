@@ -31,4 +31,12 @@ public class BookController {
                 new CommonResponseDTO("조회 완료", books)
         );
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDTO> getBook(@PathVariable Long id) {
+        BookDTO.Res book = bookService.findById(id);
+        return ResponseEntity.ok(
+                new CommonResponseDTO("조회 완료", book)
+        );
+    }
 }
