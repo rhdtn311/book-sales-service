@@ -17,6 +17,7 @@ public class JdbcBookRepository implements BookRepository {
 
     private final static String FIND_BY_CATEGORY_SQL = "SELECT * FROM BOOK b LEFT JOIN CATEGORY c ON b.category_id = c.id";
     private final static String FIND_BY_ID_SQL = "SELECT * FROM BOOK WHERE id = :id";
+    private final static String EXIST_BY_ID_SQL = "SELECT COUNT(*) FROM BOOK WHERE id = :id LIMIT 1";
 
     private final static Logger logger = LoggerFactory.getLogger(JdbcBookRepository.class);
 
@@ -72,4 +73,8 @@ public class JdbcBookRepository implements BookRepository {
         return Optional.empty();
     }
 
+    @Override
+    public boolean existBook(Long id) {
+        return template.queryForObject(EXIST_BY_ID_SQL, Map.of("id", id), Integer.class) > 0;
+    }
 }

@@ -37,4 +37,9 @@ public class BookService {
 
         return DtoConverter.convertBookToResDTO(book);
     }
+
+    public boolean existBook(Long id) {
+        if (!bookRepository.existBook(id)) throw new BookNotFoundException();
+        return true;
+    }
 }

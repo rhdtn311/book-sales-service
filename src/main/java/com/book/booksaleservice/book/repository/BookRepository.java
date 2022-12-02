@@ -9,4 +9,6 @@ public interface BookRepository {
     List<Book> findByCategory(String mainCategory, String subCategory);
 
     Optional<Book> findById(Long id);
+
+    boolean existBook(Long id);
 }
