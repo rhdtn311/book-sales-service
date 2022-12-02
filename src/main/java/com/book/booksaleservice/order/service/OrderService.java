@@ -34,9 +34,9 @@ public class OrderService {
         Long orderId = orderRepository.save(order);
 
         orderDtoReq.books().forEach(book -> {
-            orderBookRepository.save(new OrderBook(orderId, book.id(), book.amount()));
+            orderBookRepository.save(new OrderBook(orderId, book.id(), book.count()));
         });
 
-        return order.getId();
+        return orderId;
     }
 }
