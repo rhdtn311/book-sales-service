@@ -21,6 +21,7 @@ public class JdbcBookRepository implements BookRepository {
                 .title(resultSet.getString("title"))
                 .price(resultSet.getLong("price"))
                 .author(resultSet.getString("author"))
+                .plot(resultSet.getString("plot"))
                 .publisher(resultSet.getString("publisher"))
                 .amount(resultSet.getInt("amount"))
                 .categoryId(resultSet.getLong("category_id"))

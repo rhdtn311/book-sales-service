@@ -6,15 +6,17 @@ public class Book {
     private final long price;
     private final String publisher;
     private final String author;
+    private final String plot;
     private final int amount;
     private final Long categoryId;
 
-    public Book(Long id, String title, long price, String publisher, String author, int amount, Long categoryId) {
+    public Book(Long id, String title, long price, String publisher, String author, String plot, int amount, Long categoryId) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.publisher = publisher;
         this.author = author;
+        this.plot = plot;
         this.amount = amount;
         this.categoryId = categoryId;
     }
@@ -29,6 +31,7 @@ public class Book {
         private long price;
         private String publisher;
         private String author;
+        private String plot;
         private int amount;
         private Long categoryId;
 
@@ -59,6 +62,11 @@ public class Book {
             return this;
         }
 
+        public BookBuilder plot(String plot) {
+            this.plot = plot;
+            return this;
+        }
+
         public BookBuilder amount(int amount) {
             this.amount = amount;
             return this;
@@ -70,7 +78,7 @@ public class Book {
         }
 
         public Book build() {
-            return new Book(this.id, this.title, this.price, this.publisher, this.author, this.amount, this.categoryId);
+            return new Book(this.id, this.title, this.price, this.publisher, this.author, this.plot, this.amount, this.categoryId);
         }
     }
 
@@ -92,6 +100,10 @@ public class Book {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getPlot() {
+        return plot;
     }
 
     public int getAmount() {
