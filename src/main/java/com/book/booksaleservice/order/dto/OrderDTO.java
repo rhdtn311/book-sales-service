@@ -12,4 +12,7 @@ public class OrderDTO {
                     .reduce(0L, Long::sum);
         }
     }
+
+    public record Req(String email, String address, List<BookDTO.Req> books, long totalPrice) {
+    }
 }
