@@ -26,8 +26,18 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseDTO> getOrderPage(HttpServletRequest request) {
+    @GetMapping("/{bookId}")
+    public ResponseEntity<ResponseDTO> getSingleOrderPage(@PathVariable Long bookId) {
+        BookDTO.Res book = bookService.findById(bookId);
+
+        return ResponseEntity.ok(
+                new CommonResponseDTO("조회 완료",
+                        new OrderDTO.Res(List.of(book), book.price())
+                ));
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<ResponseDTO> getCartOrderPage(HttpServletRequest request) {
         HashSet<Long> cart = (HashSet<Long>) request.getSession().getAttribute(SessionConst.CART);
 
         List<BookDTO.Res> books = bookService.findByAllId(cart);
