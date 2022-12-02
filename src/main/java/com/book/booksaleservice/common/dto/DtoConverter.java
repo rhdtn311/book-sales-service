@@ -11,7 +11,7 @@ public class DtoConverter {
     }
 
     public static BookDTO.Res convertBookToResDto(Book book) {
-        return new BookDTO.Res(book.getId(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPlot(), book.getPrice());
+        return new BookDTO.Res(book.getId(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPlot(), book.getPrice(), 1);
     }
 
     public static Customer convertOrderDtoToCustomer(OrderDTO.Req orderDtoReq) {

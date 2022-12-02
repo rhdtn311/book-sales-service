@@ -56,7 +56,18 @@ public class BookController {
         }
 
         return ResponseEntity.ok(
-                new CommonResponseDTO("장바구니에 아이템 담기 성공", null)
+                new CommonResponseDTO("장바구니에 아이템 담기 완료", null)
+        );
+    }
+
+    @GetMapping("/cart")
+    public ResponseEntity<ResponseDTO> getCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
+        List<BookDTO.Res> books = bookService.findByAllId(ids);
+
+        return ResponseEntity.ok(
+                new CommonResponseDTO("조회 완료", books)
         );
     }
 }
