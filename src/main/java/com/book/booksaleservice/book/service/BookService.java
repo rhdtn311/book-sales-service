@@ -8,6 +8,7 @@ import com.book.booksaleservice.common.exception.book.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -41,5 +42,11 @@ public class BookService {
     public boolean existBook(Long id) {
         if (!bookRepository.existBook(id)) throw new BookNotFoundException();
         return true;
+    }
+
+    public List<BookDTO.Res> findByAllId(Set<Long> ids) {
+        List<Book> books = bookRepository.findByAllId(ids);
+
+        return entityToDtoList(books);
     }
 }

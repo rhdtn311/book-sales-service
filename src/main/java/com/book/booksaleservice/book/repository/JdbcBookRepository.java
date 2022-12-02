@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class JdbcBookRepository implements BookRepository {
@@ -18,6 +19,7 @@ public class JdbcBookRepository implements BookRepository {
     private final static String FIND_BY_CATEGORY_SQL = "SELECT * FROM BOOK b LEFT JOIN CATEGORY c ON b.category_id = c.id";
     private final static String FIND_BY_ID_SQL = "SELECT * FROM BOOK WHERE id = :id";
     private final static String EXIST_BY_ID_SQL = "SELECT COUNT(*) FROM BOOK WHERE id = :id LIMIT 1";
+    private final static String FIND_BY_ALL_ID_SQL = "SELECT * FROM BOOK";
 
     private final static Logger logger = LoggerFactory.getLogger(JdbcBookRepository.class);
 
@@ -76,5 +78,16 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public boolean existBook(Long id) {
         return template.queryForObject(EXIST_BY_ID_SQL, Map.of("id", id), Integer.class) > 0;
+    }
+
+    @Override
+    public List<Book> findByAllId(Set<Long> ids) {
+        return template.query(FIND_BY_ALL_ID_SQL + getFindByAllIdSqlCondition(ids), bookRowMapper);
+    }
+
+    private String getFindByAllIdSqlCondition(Set<Long> ids) {
+        StringBuilder condition = new StringBuilder(" WHERE ");
+        ids.forEach(id -> condition.append("id = ").append(id).append(" OR "));
+        return condition.substring(0, condition.length() - 3);
     }
 }
