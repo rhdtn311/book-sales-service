@@ -28,7 +28,7 @@ public class BookService {
 
     private List<BookDTO.Res> entityToDtoList(List<Book> books) {
         return books.stream()
-                .map(DtoConverter::convertBookToResDTO)
+                .map(DtoConverter::convertBookToResDto)
                 .toList();
     }
 
@@ -36,7 +36,7 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(BookNotFoundException::new);
 
-        return DtoConverter.convertBookToResDTO(book);
+        return DtoConverter.convertBookToResDto(book);
     }
 
     public boolean existBook(Long id) {
