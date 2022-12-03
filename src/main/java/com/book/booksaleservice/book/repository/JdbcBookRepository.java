@@ -20,6 +20,7 @@ public class JdbcBookRepository implements BookRepository {
     private final static String FIND_BY_ID_SQL = "SELECT * FROM BOOK WHERE id = :id";
     private final static String EXIST_BY_ID_SQL = "SELECT COUNT(*) FROM BOOK WHERE id = :id LIMIT 1";
     private final static String FIND_BY_ALL_ID_SQL = "SELECT * FROM BOOK";
+    private final static String UPDATE_AMOUNT_SQL = "UPDATE BOOK SET amount = :amount WHERE id = :id";
 
     private final static Logger logger = LoggerFactory.getLogger(JdbcBookRepository.class);
 
@@ -83,6 +84,15 @@ public class JdbcBookRepository implements BookRepository {
     @Override
     public List<Book> findByAllId(Set<Long> ids) {
         return template.query(FIND_BY_ALL_ID_SQL + getFindByAllIdSqlCondition(ids), bookRowMapper);
+    }
+
+    @Override
+    public void updateAmount(Long id, int amount) {
+        try {
+            template.update(UPDATE_AMOUNT_SQL, Map.of("amount", amount, "id", id));
+        } catch (DataAccessException e) {
+            logger.error("[ERROR] Database error : {}", e.getMessage());
+        }
     }
 
     private String getFindByAllIdSqlCondition(Set<Long> ids) {

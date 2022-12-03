@@ -14,4 +14,6 @@ public interface BookRepository {
     boolean existBook(Long id);
 
     List<Book> findByAllId(Set<Long> ids);
+
+    void updateAmount(Long id, int amount);
 }

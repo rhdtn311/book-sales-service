@@ -21,6 +21,10 @@ public class Book {
         this.categoryId = categoryId;
     }
 
+    public boolean isOverCount(int count) {
+        return count > this.amount;
+    }
+
     public static BookBuilder builder() {
         return new BookBuilder();
     }
