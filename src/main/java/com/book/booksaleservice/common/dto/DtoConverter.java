@@ -10,8 +10,8 @@ public class DtoConverter {
     private DtoConverter() {
     }
 
-    public static BookDTO.Res convertBookToResDto(Book book) {
-        return new BookDTO.Res(book.getId(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPlot(), book.getPrice(), 1);
+    public static BookDTO.Res convertBookToResDto(Book book, int count) {
+        return new BookDTO.Res(book.getId(), book.getTitle(), book.getAuthor(), book.getPublisher(), book.getPlot(), book.getPrice(), count);
     }
 
     public static Customer convertOrderDtoToCustomer(OrderDTO.Req orderDtoReq) {

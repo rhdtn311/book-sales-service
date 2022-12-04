@@ -7,8 +7,8 @@ import com.book.booksaleservice.common.dto.DtoConverter;
 import com.book.booksaleservice.common.exception.book.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class BookService {
@@ -28,7 +28,7 @@ public class BookService {
 
     private List<BookDTO.Res> entityToDtoList(List<Book> books) {
         return books.stream()
-                .map(DtoConverter::convertBookToResDto)
+                .map(book -> DtoConverter.convertBookToResDto(book, 1))
                 .toList();
     }
 
@@ -36,7 +36,7 @@ public class BookService {
         Book book = bookRepository.findById(id)
                 .orElseThrow(BookNotFoundException::new);
 
-        return DtoConverter.convertBookToResDto(book);
+        return DtoConverter.convertBookToResDto(book, 1);
     }
 
     public boolean existBook(Long id) {
@@ -44,9 +44,34 @@ public class BookService {
         return true;
     }
 
-    public List<BookDTO.Res> findByAllId(Set<Long> ids) {
+    public List<BookDTO.Res> findByAllId(List<Long> ids) {
         List<Book> books = bookRepository.findByAllId(ids);
 
         return entityToDtoList(books);
     }
+
+    public List<BookDTO.Res> findByAllIdAndChangeCount(List<BookDTO.Req> cart) {
+        List<Book> books = bookRepository.findByAllId(bookReqDTOsToIds(cart));
+        return entityToDtoListWithCount(books, cart);
+    }
+
+    private List<Long> bookReqDTOsToIds(List<BookDTO.Req> cart) {
+        return cart.stream()
+                .map(BookDTO.Req::id)
+                .toList();
+    }
+
+    private List<BookDTO.Res> entityToDtoListWithCount(List<Book> books, List<BookDTO.Req> cart) {
+        List<BookDTO.Res> resDtos = new ArrayList<>();
+        for (BookDTO.Req req : cart) {
+            Book findBook = books.stream()
+                    .filter(book -> book.getId().equals(req.id()))
+                    .findFirst()
+                    .get();
+
+            resDtos.add(DtoConverter.convertBookToResDto(findBook, req.count()));
+        }
+        return resDtos;
+    }
 }
+

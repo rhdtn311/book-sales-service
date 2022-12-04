@@ -4,7 +4,6 @@ import com.book.booksaleservice.book.domain.Book;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface BookRepository {
     List<Book> findByCategory(String mainCategory, String subCategory);
@@ -13,7 +12,7 @@ public interface BookRepository {
 
     boolean existBook(Long id);
 
-    List<Book> findByAllId(Set<Long> ids);
+    List<Book> findByAllId(List<Long> ids);
 
     void updateAmount(Long id, int amount);
 }

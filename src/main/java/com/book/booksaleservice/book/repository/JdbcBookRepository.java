@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public class JdbcBookRepository implements BookRepository {
@@ -82,7 +81,7 @@ public class JdbcBookRepository implements BookRepository {
     }
 
     @Override
-    public List<Book> findByAllId(Set<Long> ids) {
+    public List<Book> findByAllId(List<Long> ids) {
         return template.query(FIND_BY_ALL_ID_SQL + getFindByAllIdSqlCondition(ids), bookRowMapper);
     }
 
@@ -95,7 +94,7 @@ public class JdbcBookRepository implements BookRepository {
         }
     }
 
-    private String getFindByAllIdSqlCondition(Set<Long> ids) {
+    private String getFindByAllIdSqlCondition(List<Long> ids) {
         StringBuilder condition = new StringBuilder(" WHERE ");
         ids.forEach(id -> condition.append("id = ").append(id).append(" OR "));
         return condition.substring(0, condition.length() - 3);
