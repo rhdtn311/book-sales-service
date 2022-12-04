@@ -67,7 +67,7 @@ public class BookController {
 
         HttpSession session = request.getSession();
 
-        if (session.getAttribute(SessionConst.CART) != null) {
+        if (!isEmptyCart(request)) {
             HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
             books = bookService.findByAllId(new ArrayList<>(ids));
         }
@@ -75,5 +75,27 @@ public class BookController {
         return ResponseEntity.ok(
                 new CommonResponseDTO("조회 완료", books)
         );
+    }
+
+    private boolean isEmptyCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return session.getAttribute(SessionConst.CART) == null || ((HashSet<Long>) session.getAttribute(SessionConst.CART)).isEmpty();
+    }
+
+    @DeleteMapping("/cart/{id}")
+    public ResponseEntity<ResponseDTO> deleteBookAtCart(HttpServletRequest request,
+                                                        @PathVariable Long id) {
+        HttpSession session = request.getSession();
+        HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
+
+        boolean result = deleteId(ids, id);
+
+        return ResponseEntity.ok(
+                new CommonResponseDTO(result ? "삭제 완료" : "삭제된 데이터 없음", result)
+        );
+    }
+
+    private boolean deleteId(HashSet<Long> ids, Long id) {
+        return ids.remove(id);
     }
 }
