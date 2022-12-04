@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,8 +43,8 @@ public class BookController {
         );
     }
 
-    @PostMapping("/cart")
-    public ResponseEntity<ResponseDTO> putBookInCart(@RequestParam(value = "id") Long id,
+    @PostMapping("/cart/{id}")
+    public ResponseEntity<ResponseDTO> putBookInCart(@PathVariable Long id,
                                                      HttpServletRequest request) {
 
         bookService.existBook(id);
@@ -62,9 +63,14 @@ public class BookController {
 
     @GetMapping("/cart")
     public ResponseEntity<ResponseDTO> getCart(HttpServletRequest request) {
+        List<BookDTO.Res> books = new ArrayList<>();
+
         HttpSession session = request.getSession();
-        HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
-        List<BookDTO.Res> books = bookService.findByAllId(ids);
+
+        if (session.getAttribute(SessionConst.CART) != null) {
+            HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
+            books = bookService.findByAllId(new ArrayList<>(ids));
+        }
 
         return ResponseEntity.ok(
                 new CommonResponseDTO("조회 완료", books)
