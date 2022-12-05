@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -38,7 +39,7 @@ public class OrderService {
         Customer customer = DtoConverter.convertOrderDtoToCustomer(orderDtoReq);
         Long customerId = customerRepository.save(customer);
 
-        Order order = new Order(customerId, LocalDateTime.now(), DeliveryStatus.READY);
+        Order order = new Order(customerId, LocalDateTime.now(), DeliveryStatus.READY, orderDtoReq.totalPrice());
         Long orderId = orderRepository.save(order);
 
         orderDtoReq.books().forEach(book -> {
@@ -58,5 +59,10 @@ public class OrderService {
             throw new NotEnoughBookAmountException();
         }
         return true;
+    }
+
+    public List<OrderDTO.OrderHistoryQueryRes> getOrderList() {
+
+        return orderRepository.findOrderHistory();
     }
 }

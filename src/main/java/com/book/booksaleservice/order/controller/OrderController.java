@@ -57,4 +57,14 @@ public class OrderController {
                         orderId)
         );
     }
+
+    @GetMapping
+    public ResponseEntity<ResponseDTO> getOrderList() {
+        List<OrderDTO.OrderHistoryQueryRes> orderList = orderService.getOrderList();
+
+        return ResponseEntity.ok(
+                new CommonResponseDTO("조회 완료",
+                        orderList)
+        );
+    }
 }

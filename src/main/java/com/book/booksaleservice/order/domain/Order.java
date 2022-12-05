@@ -7,15 +7,17 @@ public class Order {
     private Long customerId;
     private final LocalDateTime orderDate;
     private DeliveryStatus deliveryStatus;
+    private long price;
 
     public Order(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
-    public Order(Long customerId, LocalDateTime orderDate, DeliveryStatus deliveryStatus) {
+    public Order(Long customerId, LocalDateTime orderDate, DeliveryStatus deliveryStatus, long price) {
         this.customerId = customerId;
         this.orderDate = orderDate;
         this.deliveryStatus = deliveryStatus;
+        this.price = price;
     }
 
     public Long getId() {
@@ -32,5 +34,9 @@ public class Order {
 
     public DeliveryStatus getDeliveryStatus() {
         return deliveryStatus;
+    }
+
+    public long getPrice() {
+        return price;
     }
 }

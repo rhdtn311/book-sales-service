@@ -2,6 +2,7 @@ package com.book.booksaleservice.order.dto;
 
 import com.book.booksaleservice.book.dto.BookDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderDTO {
@@ -14,5 +15,10 @@ public class OrderDTO {
     }
 
     public record Req(String email, String address, List<BookDTO.Req> books, long totalPrice) {
+    }
+
+    public record OrderHistoryQueryRes(Long orderId, String email, String address, LocalDateTime orderDate,
+                                       String status,
+                                       long price, List<String> titles) {
     }
 }
