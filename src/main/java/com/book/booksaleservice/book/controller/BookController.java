@@ -5,6 +5,7 @@ import com.book.booksaleservice.book.service.BookService;
 import com.book.booksaleservice.common.SessionConst;
 import com.book.booksaleservice.common.dto.response.CommonResponseDTO;
 import com.book.booksaleservice.common.dto.response.ResponseDTO;
+import com.book.booksaleservice.common.exception.book.BookNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,9 @@ public class BookController {
     public ResponseEntity<ResponseDTO> putBookInCart(@PathVariable Long id,
                                                      HttpServletRequest request) {
 
-        bookService.existBook(id);
+        if (!bookService.existBook(id)) {
+            throw new BookNotFoundException();
+        }
 
         HttpSession session = request.getSession();
         if (session.getAttribute(SessionConst.CART) == null) {
@@ -57,7 +60,7 @@ public class BookController {
         }
 
         return ResponseEntity.ok(
-                new CommonResponseDTO("장바구니에 아이템 담기 완료", null)
+                new CommonResponseDTO("장바구니에 아이템 담기 완료", id)
         );
     }
 
@@ -67,7 +70,7 @@ public class BookController {
 
         HttpSession session = request.getSession();
 
-        if (!isEmptyCart(request)) {
+        if (!isEmptyCart(session)) {
             HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
             books = bookService.findByAllId(new ArrayList<>(ids));
         }
@@ -77,8 +80,7 @@ public class BookController {
         );
     }
 
-    private boolean isEmptyCart(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+    private boolean isEmptyCart(HttpSession session) {
         return session.getAttribute(SessionConst.CART) == null || ((HashSet<Long>) session.getAttribute(SessionConst.CART)).isEmpty();
     }
 
@@ -86,12 +88,16 @@ public class BookController {
     public ResponseEntity<ResponseDTO> deleteBookAtCart(HttpServletRequest request,
                                                         @PathVariable Long id) {
         HttpSession session = request.getSession();
-        HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
+        boolean deleteResult = false;
+        if (!isEmptyCart(session)) {
+            HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
 
-        boolean result = deleteId(ids, id);
+            deleteResult = deleteId(ids, id);
+        }
+
 
         return ResponseEntity.ok(
-                new CommonResponseDTO(result ? "삭제 완료" : "삭제된 데이터 없음", result)
+                new CommonResponseDTO(deleteResult ? "삭제 완료" : "삭제된 데이터 없음", deleteResult)
         );
     }
 
