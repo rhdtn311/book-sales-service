@@ -94,6 +94,8 @@ API를 문서화 하기 위해 Spring Rest Docs를 사용하기로 했습니다.
 ## 화면
 https://www.figma.com/file/0N5aUFnlgBbIL584f2Ecbw/Untitled?node-id=0%3A1&t=LzdtwMRwMwEnOZCJ-0
 
+<br>
+
 ## 느낀점
 
 - **JPQL은 상당히 불편하다.**
