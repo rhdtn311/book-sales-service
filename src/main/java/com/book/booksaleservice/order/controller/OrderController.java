@@ -2,6 +2,7 @@ package com.book.booksaleservice.order.controller;
 
 import com.book.booksaleservice.book.dto.BookDTO;
 import com.book.booksaleservice.book.service.BookService;
+import com.book.booksaleservice.common.SessionConst;
 import com.book.booksaleservice.common.dto.response.CommonResponseDTO;
 import com.book.booksaleservice.common.dto.response.ResponseDTO;
 import com.book.booksaleservice.order.dto.OrderDTO;
@@ -50,7 +51,7 @@ public class OrderController {
                                              HttpServletRequest request) {
         Long orderId = orderService.save(orderDTOReq);
 
-        request.getSession().invalidate();
+        request.getSession().removeAttribute(SessionConst.CART);
 
         return ResponseEntity.ok(
                 new CommonResponseDTO("주문 완료",

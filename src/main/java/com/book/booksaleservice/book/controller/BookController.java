@@ -68,9 +68,9 @@ public class BookController {
     public ResponseEntity<ResponseDTO> getCart(HttpServletRequest request) {
         List<BookDTO.Res> books = new ArrayList<>();
 
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
 
-        if (!isEmptyCart(session)) {
+        if (session != null && !isEmptyCart(session)) {
             HashSet<Long> ids = (HashSet<Long>) session.getAttribute(SessionConst.CART);
             books = bookService.findByAllId(new ArrayList<>(ids));
         }
