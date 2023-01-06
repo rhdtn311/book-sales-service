@@ -4,13 +4,13 @@ import com.book.booksaleservice.customer.domain.Customer;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcCustomerRepository implements CustomerRepository {
 
     private final NamedParameterJdbcTemplate template;
-    private final GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
     public JdbcCustomerRepository(NamedParameterJdbcTemplate template) {
         this.template = template;
@@ -19,9 +19,15 @@ public class JdbcCustomerRepository implements CustomerRepository {
     private static final String CUSTOMER_SAVE_SQL = "INSERT INTO CUSTOMER(email, address) VALUES (:email, :address)";
 
     public Long save(Customer customer) {
-        template.update(CUSTOMER_SAVE_SQL, getCustomerParameterSource(customer.getEmail(), customer.getAddress()), generatedKeyHolder);
+        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        return generatedKeyHolder.getKey().longValue();
+        try {
+            template.update(CUSTOMER_SAVE_SQL, getCustomerParameterSource(customer.getEmail(), customer.getAddress()), generatedKeyHolder);
+        } catch (Exception e) {
+            System.out.println("e : " + e.getMessage());
+        }
+
+        return (long) generatedKeyHolder.getKey().intValue();
     }
 
     private MapSqlParameterSource getCustomerParameterSource(String email, String address) {
