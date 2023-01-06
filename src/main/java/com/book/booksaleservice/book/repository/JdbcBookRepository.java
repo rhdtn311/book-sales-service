@@ -19,7 +19,7 @@ public class JdbcBookRepository implements BookRepository {
     private final static String FIND_BY_ID_SQL = "SELECT * FROM BOOK WHERE id = :id";
     private final static String EXIST_BY_ID_SQL = "SELECT COUNT(*) FROM BOOK WHERE id = :id LIMIT 1";
     private final static String FIND_BY_ALL_ID_SQL = "SELECT * FROM BOOK";
-    private final static String UPDATE_AMOUNT_SQL = "UPDATE BOOK SET amount = :amount WHERE id = :id";
+    private final static String UPDATE_AMOUNT_SQL = "UPDATE BOOK SET amount = :amount, version = version + 1 WHERE id = :id AND version = :version";
 
     private final static Logger logger = LoggerFactory.getLogger(JdbcBookRepository.class);
 
@@ -35,6 +35,7 @@ public class JdbcBookRepository implements BookRepository {
                 .publisher(resultSet.getString("publisher"))
                 .amount(resultSet.getInt("amount"))
                 .categoryId(resultSet.getLong("category_id"))
+                .version(resultSet.getInt("version"))
                 .build();
     };
 
@@ -86,12 +87,13 @@ public class JdbcBookRepository implements BookRepository {
     }
 
     @Override
-    public void updateAmount(Long id, int amount) {
+    public int updateAmount(Long id, int amount, int version) {
         try {
-            template.update(UPDATE_AMOUNT_SQL, Map.of("amount", amount, "id", id));
+            return template.update(UPDATE_AMOUNT_SQL, Map.of("amount", amount, "id", id, "version", version));
         } catch (DataAccessException e) {
             logger.error("[ERROR] Database error : {}", e.getMessage());
         }
+        return 0;
     }
 
     private String getFindByAllIdSqlCondition(List<Long> ids) {

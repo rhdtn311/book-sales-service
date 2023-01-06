@@ -1,5 +1,7 @@
 package com.book.booksaleservice.book.domain;
 
+import java.util.StringJoiner;
+
 public class Book {
     private Long id;
     private final String title;
@@ -9,8 +11,9 @@ public class Book {
     private final String plot;
     private final int amount;
     private final Long categoryId;
+    private Integer version;
 
-    public Book(Long id, String title, long price, String publisher, String author, String plot, int amount, Long categoryId) {
+    public Book(Long id, String title, long price, String publisher, String author, String plot, int amount, Long categoryId, Integer version) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -19,6 +22,7 @@ public class Book {
         this.plot = plot;
         this.amount = amount;
         this.categoryId = categoryId;
+        this.version = version;
     }
 
     public boolean isOverCount(int count) {
@@ -38,6 +42,7 @@ public class Book {
         private String plot;
         private int amount;
         private Long categoryId;
+        private int version;
 
         BookBuilder() {}
 
@@ -81,8 +86,13 @@ public class Book {
             return this;
         }
 
+        public BookBuilder version(int version) {
+            this.version = version;
+            return this;
+        }
+
         public Book build() {
-            return new Book(this.id, this.title, this.price, this.publisher, this.author, this.plot, this.amount, this.categoryId);
+            return new Book(this.id, this.title, this.price, this.publisher, this.author, this.plot, this.amount, this.categoryId, this.version);
         }
     }
 
@@ -116,5 +126,24 @@ public class Book {
 
     public Long getCategoryId() {
         return categoryId;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Book.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("title='" + title + "'")
+                .add("price=" + price)
+                .add("publisher='" + publisher + "'")
+                .add("author='" + author + "'")
+                .add("plot='" + plot + "'")
+                .add("amount=" + amount)
+                .add("categoryId=" + categoryId)
+                .add("version=" + version)
+                .toString();
     }
 }

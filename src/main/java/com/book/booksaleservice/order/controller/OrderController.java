@@ -7,6 +7,7 @@ import com.book.booksaleservice.common.dto.response.CommonResponseDTO;
 import com.book.booksaleservice.common.dto.response.ResponseDTO;
 import com.book.booksaleservice.order.dto.OrderDTO;
 import com.book.booksaleservice.order.service.OrderService;
+import com.book.booksaleservice.order.service.OrderServiceFacade;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,12 @@ public class OrderController {
 
     private final BookService bookService;
     private final OrderService orderService;
+    private final OrderServiceFacade orderServiceFacade;
 
-    public OrderController(BookService bookService, OrderService orderService) {
+    public OrderController(BookService bookService, OrderService orderService, OrderServiceFacade orderServiceFacade) {
         this.bookService = bookService;
         this.orderService = orderService;
+        this.orderServiceFacade = orderServiceFacade;
     }
 
     @GetMapping("/{bookId}")
@@ -49,7 +52,7 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<ResponseDTO> order(@RequestBody OrderDTO.Req orderDTOReq,
                                              HttpServletRequest request) {
-        Long orderId = orderService.save(orderDTOReq);
+        Long orderId = orderServiceFacade.save(orderDTOReq);
 
         request.getSession().removeAttribute(SessionConst.CART);
 

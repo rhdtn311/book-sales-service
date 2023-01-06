@@ -14,5 +14,5 @@ public interface BookRepository {
 
     List<Book> findByAllId(List<Long> ids);
 
-    void updateAmount(Long id, int amount);
+    int updateAmount(Long id, int amount, int version);
 }
