@@ -45,7 +45,7 @@ public class BookControllerTest {
         String subCategoryParam = "NOVEL";
 
         List<BookDTO.Res> response = List.of(
-                new BookDTO.Res(1L, "종의 기원", "정유정", "은행나무", "줄거리", 13000)
+                new BookDTO.Res(1L, "종의 기원", "정유정", "은행나무", "줄거리", 13000, 1)
         );
 
         when(bookService.findByCategory(mainCategoryParam, subCategoryParam))
@@ -70,10 +70,12 @@ public class BookControllerTest {
                         responseFields(
                                 fieldWithPath("status").type(JsonFieldType.NUMBER).description("결과 상태 코드"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("결과 메세지"),
+                                fieldWithPath("data[0].id").type(JsonFieldType.NUMBER).description("ID"),
                                 fieldWithPath("data[0].title").type(JsonFieldType.STRING).description("제목"),
                                 fieldWithPath("data[0].author").type(JsonFieldType.STRING).description("작가"),
                                 fieldWithPath("data[0].publisher").type(JsonFieldType.STRING).description("출판사"),
-                                fieldWithPath("data[0].price").type(JsonFieldType.NUMBER).description("가격")
+                                fieldWithPath("data[0].price").type(JsonFieldType.NUMBER).description("가격"),
+                                fieldWithPath("data[0].plot").type(JsonFieldType.STRING).description("줄거리")
                         )));
     }
 
@@ -83,7 +85,7 @@ public class BookControllerTest {
         // given
         Long id = 1L;
 
-        BookDTO.Res response = new BookDTO.Res(1L, "title", "author", "publisher", "plot", 15000);
+        BookDTO.Res response = new BookDTO.Res(1L, "title", "author", "publisher", "plot", 15000, 1);
 
         when(bookService.findById(id))
                 .thenReturn(response);
