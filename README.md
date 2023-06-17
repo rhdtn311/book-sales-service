@@ -98,18 +98,14 @@ https://www.figma.com/file/0N5aUFnlgBbIL584f2Ecbw/Untitled?node-id=0%3A1&t=Lzdtw
 
 ## 느낀점
 
-- **JPQL은 상당히 불편하다.**
+- **JDBC는 상당히 불편하다.**
     - 쿼리를 문자열로 작성하기 때문에 컴파일 타임에 오류를 잡을 수 없어 오타로 인한 문제가 많이 발생함
     - SQL 작업 후 id를 반환하는 것이 번거로움
         - `GeneratedKeyHolder`를 이용한다.
     - 간단한 데이터 수정 작업(더하기, 빼기)에도 update문을 직접 작성해서 넣어줘야함 (JPA는 엔티티 객체를 수정하고 커밋하면 알아서 SQL 쏴줌)
     - 동적 쿼리 작성 시 정말 불편함
 
-- **GraphQL이 왜 나왔는지 알 것 같다.**
-    - DTO를 너무 포괄적으로 만들어서 사용하자니 낭비되는 리소스가 너무 많음
-    - 그렇다고 DTO를 잘게 쪼개자니 클래스가 너무 많이 생성되고 그로인해 네이밍도 너무 힘듦.. 하나의 필드 차이로 인해 새로운 클래스를 만드는게 탐탁지 않음.
-
-- JPQL로 값 조회 시 가공하려면 → *`ResultSetExtractor`* 을 사용한다
+- JDBC로 값 조회 시 가공하려면 → *`ResultSetExtractor`* 을 사용한다
 
 [Spring ResultSetExtractor Example - javatpoint](https://www.javatpoint.com/ResultSetExtractor-example)
 
